@@ -3,6 +3,7 @@ import Homepage from "./pages/Homepage";
 import Learningpage from "./pages/Learningpage";
 import Quizpage from "./pages/Quizpage";
 import Wheelpage from "./pages/Wheelpage";
+import Reelspage from "./pages/Reelspage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/learn" element={<Learningpage />} />
         <Route path="/quiz" element={<Quizpage />} />
         <Route path="/wheel" element={<Wheelpage />} />
+        <Route path="/reels" element={<Reelspage />} />
       </Routes>
     </div>
   );
