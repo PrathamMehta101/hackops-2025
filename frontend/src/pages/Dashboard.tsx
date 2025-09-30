@@ -1,6 +1,7 @@
 import { Card } from "../components/Card";
 import { Button } from "../components/Button";
 import { Progress } from "../components/Progress";
+import { useNavigate } from "react-router";
 
 interface DashboardProps {
   gameData: {
@@ -10,17 +11,18 @@ interface DashboardProps {
     xpToNext: number;
     totalXp: number;
   };
-  onNavigate: (page: string) => void;
+//   onNavigate: (page: string) => void;
   user?: {
     name?: string;
-  };
+  } | null;
 }
 
-export default function Dashboard({ gameData, onNavigate, user }: DashboardProps) {
+export default function Dashboard({ gameData, user }: DashboardProps) {
   const { streak, level, xp, xpToNext, totalXp } = gameData;
   
   const progressPercentage = (xp / xpToNext) * 100;
-  
+  const navigate = useNavigate();
+
   const dailyCareerBytes = [
     "💡 73% of astronauts experience space vertigo - you're not lost, you're exploring!",
     "🎯 The average space explorer visits 3 new systems per year - embrace the vastness!",
@@ -130,7 +132,7 @@ export default function Dashboard({ gameData, onNavigate, user }: DashboardProps
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Button
-            onClick={() => onNavigate('learning')}
+            onClick={() => navigate('/learning')}
             className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           >
             <div className="text-center">
@@ -141,7 +143,7 @@ export default function Dashboard({ gameData, onNavigate, user }: DashboardProps
           </Button>
 
           <Button
-            onClick={() => onNavigate('explorer')}
+            onClick={() => navigate('/explorer')}
             className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           >
             <div className="text-center">
@@ -152,7 +154,7 @@ export default function Dashboard({ gameData, onNavigate, user }: DashboardProps
           </Button>
 
           <Button
-            onClick={() => onNavigate('ats')}
+            onClick={() => navigate('/ats')}
             className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           >
             <div className="text-center">

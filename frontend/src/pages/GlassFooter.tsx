@@ -6,7 +6,7 @@ export default function GlassFooter() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-[#0a0a0a] text-white px-6 py-12 md:px-20 rounded-t-3xl border-t border-white/10"
+      className="bg-[#0a0a0a] text-white px-6 py-12 md:px-20 border-t border-white/10"
     >
       <div className="max-w-screen-xl mx-auto">
         {/* Top Section */}
