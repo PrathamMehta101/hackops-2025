@@ -9,6 +9,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router";
 
 interface GlassNavbarProps {
   currentPage: string;
@@ -24,27 +25,43 @@ export default function GlassNavbar({
   onNavigate,
   gameData,
 }: GlassNavbarProps) {
+  const navigate = useNavigate();
   const navItems = [
-    { id: "dashboard", icon: Home, label: "Base", color: "text-blue-400" },
+    {
+      id: "dashboard",
+      icon: Home,
+      label: "Base",
+      color: "text-blue-400",
+      href: "/dashboard",
+    },
     {
       id: "explorer",
       icon: Compass,
       label: "Explore",
       color: "text-purple-400",
+      href: "/reels",
     },
     {
       id: "learning",
       icon: BookOpen,
+      href: "/learning",
       label: "Knowledge",
       color: "text-green-400",
     },
-    { id: "ats", icon: Users, label: "Trajectory", color: "text-cyan-400" },
+    {
+      id: "ats",
+      icon: Users,
+      label: "Trajectory",
+      color: "text-cyan-400",
+      onClick: () => window.open("https://cosmic-coder-a1069d89.base44.app", "_blank"),
+    },
     { id: "profile", icon: User, label: "Pilot", color: "text-pink-400" },
   ];
 
   const handleNavClick = (pageId: string) => {
     if (pageId === "profile") {
       // Profile is placeholder for now
+
       return;
     }
     onNavigate(pageId);
@@ -79,7 +96,7 @@ export default function GlassNavbar({
                       key={item.id}
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleNavClick(item.id)}
+                      onClick={item.onClick ? item.onClick : () => navigate(item.href)}
                       disabled={isDisabled}
                       className={`flex items-center space-x-2 rounded-full px-4 py-2 transition-all duration-200 hover:bg-white/10 ${
                         isActive ? "bg-white/20 shadow-lg" : ""
@@ -139,19 +156,23 @@ export default function GlassNavbar({
                 </button>
               </li>
             )}
-            <div className="bg-orange-500/30 backdrop-blur-xl border border-orange-400/30 rounded-full px-3 py-1 flex items-center space-x-2">
-              <Flame className="w-4 h-4 text-orange-400" />
-              <span className="text-sm font-medium text-orange-300">
-                {gameData.streak}
-              </span>
-            </div>
+           {isAuthenticated && (
+              <div>
+                <div className="bg-orange-500/30 backdrop-blur-xl border border-orange-400/30 rounded-full px-3 py-1 flex items-center space-x-2">
+                  <Flame className="w-4 h-4 text-orange-400" />
+                  <span className="text-sm font-medium text-orange-300">
+                    {gameData.streak}
+                  </span>
+                </div>
 
-            <div className="bg-purple-500/30 backdrop-blur-xl border border-purple-400/30 rounded-full px-3 py-1 flex items-center space-x-2">
-              <Trophy className="w-4 h-4 text-purple-400" />
-              <span className="text-sm font-medium text-purple-300">
-                L{gameData.level}
-              </span>
-            </div>
+                <div className="bg-purple-500/30 backdrop-blur-xl border border-purple-400/30 rounded-full px-3 py-1 flex items-center space-x-2">
+                  <Trophy className="w-4 h-4 text-purple-400" />
+                  <span className="text-sm font-medium text-purple-300">
+                    L{gameData.level}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
