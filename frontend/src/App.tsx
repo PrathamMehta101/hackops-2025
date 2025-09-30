@@ -14,7 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import MicroLearning from "./pages/MicroLearning";
 import CareerExplorer from "./pages/CareerExplorer";
 import ATSChecker from "./pages/ATSChecker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GlassNavbar from "./pages/GlassNavbar";
 import GlassFooter from "./pages/GlassFooter";
 import Chatbot from "./pages/Chatbot";
@@ -22,8 +22,8 @@ import Chatbot from "./pages/Chatbot";
 function App() {
   const [user, setUser] = useState<{ name?: string } | null>(null);
   const [gameData, setGameData] = useState({
-    streak: 7,
-    level: 3,
+    streak: Number(sessionStorage.getItem("streak")) || 7,
+    level: 7,
     xp: 230,
     xpToNext: 300,
     totalXp: 830,
@@ -32,6 +32,10 @@ function App() {
   const updateGameData = (updates: Partial<typeof gameData>) => {
     setGameData((prev) => ({ ...prev, ...updates }));
   };
+
+  useEffect(() => {
+    sessionStorage.setItem("streak", String(gameData.streak));
+  }, [gameData.streak]);
 
   const navigate = useNavigate();
   return (

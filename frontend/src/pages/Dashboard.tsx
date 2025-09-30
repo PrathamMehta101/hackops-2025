@@ -2,6 +2,11 @@ import { Card } from "../components/Card";
 import { Button } from "../components/Button";
 import { Progress } from "../components/Progress";
 import { useNavigate } from "react-router";
+import { BsRocket } from "react-icons/bs";
+import { GiStarSwirl } from "react-icons/gi";
+import { SlGraph } from "react-icons/sl";
+import { SiGoogleearth } from "react-icons/si";
+import { GiTrophyCup } from "react-icons/gi";
 
 interface DashboardProps {
   gameData: {
@@ -11,7 +16,7 @@ interface DashboardProps {
     xpToNext: number;
     totalXp: number;
   };
-//   onNavigate: (page: string) => void;
+  //   onNavigate: (page: string) => void;
   user?: {
     name?: string;
   } | null;
@@ -19,7 +24,7 @@ interface DashboardProps {
 
 export default function Dashboard({ gameData, user }: DashboardProps) {
   const { streak, level, xp, xpToNext, totalXp } = gameData;
-  
+  const sessionXp = Number(sessionStorage.getItem("streak")) || xp;
   const progressPercentage = (xp / xpToNext) * 100;
   const navigate = useNavigate();
 
@@ -28,11 +33,12 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
     "🎯 The average space explorer visits 3 new systems per year - embrace the vastness!",
     "🔥 Teams with dual navigation have 15% fewer trajectory errors - two minds > one mind",
     "💼 Remote space workers discover 13% more planets (but take 47% more stargazing breaks ☕)",
-    "🚀 85% of cosmic opportunities aren't broadcasted publicly - networking > space boards!"
+    "🚀 85% of cosmic opportunities aren't broadcasted publicly - networking > space boards!",
   ];
-  
-  const dailyByte = dailyCareerBytes[Math.floor(Math.random() * dailyCareerBytes.length)];
-  
+
+  const dailyByte =
+    dailyCareerBytes[Math.floor(Math.random() * dailyCareerBytes.length)];
+
   const getLevelTitle = (level: number) => {
     const titles = {
       1: "Space Cadet 🚀",
@@ -40,7 +46,7 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
       3: "Planet Navigator 🪐",
       4: "Solar Pilot ☀️",
       5: "Galaxy Commander 🌌",
-      6: "Universe Master 🌟"
+      6: "Universe Master 🌟",
     };
     return titles[level as keyof typeof titles] || "Cosmic Legend ✨";
   };
@@ -59,7 +65,7 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
       "Autopilot mode: 'Course set for success' activated 🤷‍♀️",
       "Current status: 42% starlight, 58% cosmic wisdom ☕",
       "Today's energy: Launch, orbit, and aim for the stars 🎭",
-      "Mission status: No asteroid collisions detected (yet) 😂✨"
+      "Mission status: No asteroid collisions detected (yet) 😂✨",
     ];
     return messages[Math.floor(Math.random() * messages.length)];
   };
@@ -68,11 +74,13 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
     <div className="min-h-screen p-4 pb-24 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-purple-400/20 to-pink-400/20" />
-      
+
       <div className="max-w-4xl mx-auto space-y-6 relative z-10">
         {/* Welcome Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl mb-2 text-slate-200">Welcome back to base, {user?.name}! 👋</h1>
+          <h1 className="text-3xl mb-2 text-slate-200">
+            Welcome back to base, {user?.name}! 👋
+          </h1>
           <p className="text-slate-300">{getProductivityMessage()}</p>
         </div>
 
@@ -81,13 +89,14 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
           {/* Streak Card */}
           <Card className="p-6 bg-slate-800/80 backdrop-blur-sm border-2 border-orange-400/50 hover:shadow-lg hover:shadow-orange-400/20 transition-all">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl text-orange-300">🌟 Orbital Streak</h3>
-              <div className="text-3xl font-bold text-orange-400">{streak}</div>
+              <h3 className="text-xl text-orange-300"> Orbital Streak</h3>
+              <div className="text-3xl font-bold text-orange-400">{level}</div>
             </div>
-            <p className="text-slate-300 mb-4">{getStreakMessage(streak)}</p>
+            <p className="text-slate-300 mb-4">{getStreakMessage(level)}</p>
             <div className="bg-slate-700/50 p-3 rounded-lg font-mono text-sm">
               <p className="text-orange-300">
-                $ mission-log --daily "orbital pattern maintained"<br/>
+                $ mission-log --daily "orbital pattern maintained"
+                <br />
                 Don't let your trajectory decay into a black hole! 🕳️
               </p>
             </div>
@@ -96,17 +105,21 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
           {/* Level Card */}
           <Card className="p-6 bg-slate-800/80 backdrop-blur-sm border-2 border-purple-400/50 hover:shadow-lg hover:shadow-purple-400/20 transition-all">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl text-purple-300">🪐 Rank {level}</h3>
-              <div className="text-lg font-medium text-purple-400">{getLevelTitle(level)}</div>
+              <h3 className="text-xl text-purple-300"> Rank {level}</h3>
+              <div className="text-lg font-medium text-purple-400">
+                {getLevelTitle(level)}
+              </div>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between text-sm text-slate-300">
                 <span>Cosmic Energy</span>
-                <span>{xp}/{xpToNext} CE</span>
+                <span>
+                  {sessionXp}/{xpToNext} CE
+                </span>
               </div>
               <Progress value={progressPercentage} className="h-3" />
               <p className="text-xs text-slate-400">
-                {xpToNext - xp} CE until rank {level + 1}! 🚀
+                {xpToNext - sessionXp} CE until rank {level + 1}! 🚀
               </p>
             </div>
           </Card>
@@ -115,11 +128,17 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
         {/* Daily Career Byte */}
         <Card className="p-6 bg-slate-800/80 backdrop-blur-sm border-2 border-blue-400/50">
           <div className="flex items-start space-x-4">
-            <div className="text-4xl">⭐</div>
+            <div className="text-4xl text-white">
+              <GiStarSwirl />
+            </div>
             <div className="flex-1">
-              <h3 className="text-xl mb-3 text-blue-300">Today's Cosmic Wisdom</h3>
+              <h3 className="text-xl mb-3 text-blue-300">
+                Today's Cosmic Wisdom
+              </h3>
               <div className="bg-slate-900 text-cyan-400 p-4 rounded-lg font-mono text-sm border-l-4 border-blue-400">
-                <div className="text-slate-500 mb-2">// Daily navigation insight</div>
+                <div className="text-slate-500 mb-2">
+                  // Daily navigation insight
+                </div>
                 <div className="text-slate-200">{dailyByte}</div>
               </div>
               <p className="text-xs text-slate-400 mt-2">
@@ -132,33 +151,40 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Button
-            onClick={() => navigate('/learning')}
-            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+            onClick={() => navigate("/learning")}
+            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105  bg-red-800/80 backdrop-blur-sm border-2 border-red-400/50"
           >
             <div className="text-center">
-              <div className="text-3xl mb-2">⭐</div>
+              <div className="text-3xl mb-2">
+                <GiStarSwirl />
+              </div>
               <div className="text-lg">Stellar Knowledge</div>
               <div className="text-sm opacity-90">Cosmic micro-learning</div>
             </div>
           </Button>
 
           <Button
-            onClick={() => navigate('/explorer')}
-            className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+            onClick={() => navigate("/explorer")}
+            className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105  bg-green-800/80 backdrop-blur-sm border-2 border-green-400/50"
           >
             <div className="text-center">
-              <div className="text-3xl mb-2">🌍</div>
+              <div className="text-3xl mb-2">
+                <SiGoogleearth />
+              </div>
               <div className="text-lg">Planet Explorer</div>
               <div className="text-sm opacity-90">Discover new worlds</div>
             </div>
           </Button>
 
           <Button
-            onClick={() => navigate('/ats')}
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+            onClick={() => navigate("/ats")}
+            className="hover:from-blue-600 hover:to-cyan-600 text-white p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105
+                     bg-pink-800/80 backdrop-blur-sm border-2 border-pink-400/50"
           >
             <div className="text-center">
-              <div className="text-3xl mb-2">🛸</div>
+              <div className="text-3xl mb-2">
+                <BsRocket />
+              </div>
               <div className="text-lg">Trajectory Calc</div>
               <div className="text-sm opacity-90">Path analyzer</div>
             </div>
@@ -169,7 +195,9 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
             className="border-2 border-purple-300 text-purple-300 hover:bg-purple-400/10 p-6 h-auto rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           >
             <div className="text-center">
-              <div className="text-3xl mb-2">🏆</div>
+              <div className="text-3xl mb-2">
+                <GiTrophyCup />
+              </div>
               <div className="text-lg">Galaxy Ranks</div>
               <div className="text-sm opacity-75">Coming Soon!</div>
             </div>
@@ -178,15 +206,21 @@ export default function Dashboard({ gameData, user }: DashboardProps) {
 
         {/* CI/CD Pipeline Stats */}
         <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-indigo-200">
-          <h3 className="text-xl mb-4">📊 Your Development Pipeline</h3>
+          <h3 className="text-xl mb-4">
+            <SlGraph /> Your Development Pipeline
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-indigo-600">{totalXp}</div>
+              <div className="text-2xl font-bold text-indigo-600">
+                {totalXp}
+              </div>
               <div className="text-sm text-gray-600">Total XP</div>
               <div className="text-xs text-gray-400">Code Points</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-green-600">{Math.floor(totalXp / 50)}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {Math.floor(totalXp / 50)}
+              </div>
               <div className="text-sm text-gray-600">Builds Passed</div>
               <div className="text-xs text-gray-400">Successful Deploys</div>
             </div>
